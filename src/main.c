@@ -2,6 +2,8 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_keycode.h>
+#include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_timer.h>
@@ -38,7 +40,8 @@ int main(int argc, char *argv[])
     bool isOn = true;
     bool needReDraw = true;
     SDL_Event mainEvent;
-    resetCamera(&mainCam, (SDL_Point){0, 0});
+    SDL_Point orgin = {0, 0};
+    resetCamera(&mainCam, orgin);
 
     //main program loop
     while (isOn)
@@ -51,6 +54,16 @@ int main(int argc, char *argv[])
                 case SDL_QUIT:
                 {
                     isOn = false;
+                    break;
+                }
+
+                // reset camera settings when pressing 'SPACE'
+                case SDL_KEYDOWN:
+                {
+                    if (mainEvent.key.keysym.sym == SDLK_SPACE)
+                    {
+                        resetCamera(&mainCam, orgin);
+                    }
                     break;
                 }
             }
