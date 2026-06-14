@@ -1,10 +1,7 @@
 #include "../include/main.h"
-#include "../include/tinyexpr.h"
 
 #include <SDL2/SDL_render.h>
 #include <math.h>
-
-float minorStep;
 
 // draw grid and its principle axises
 void drawGrid(SDL_Renderer *renderer, camera cam)
@@ -26,7 +23,7 @@ void drawGrid(SDL_Renderer *renderer, camera cam)
     float mathWidth = WINDOW_WIDTH / (cam.zoom);
     float rawMagnitude = log10f(mathWidth) - 1.0f;
     float remainderMagnitude = rawMagnitude - (int)rawMagnitude;
-    minorStep = powf(10.0f, (int)rawMagnitude); // step for the minor grid
+    float minorStep = powf(10.0f, (int)rawMagnitude); // step for the minor grid
     float majorStep = minorStep * 10.0f; // step for the major grid
 
     // translate to screen step
@@ -47,7 +44,7 @@ void drawGrid(SDL_Renderer *renderer, camera cam)
     // draw minor grid (fades out)
     float startGridX = fmodf(screenX, screenMinorStep);
     float startGridY = fmodf(screenY, screenMinorStep);
-    SDL_SetRenderDrawColor(renderer, 201, 201, 201, (Uint8)(255.0f * (1.0f - remainderMagnitude)));
+    SDL_SetRenderDrawColor(renderer, 201, 201, 201, (Uint8)(230.0f * (1.0f - remainderMagnitude)));
     for (float row = startGridY; row < WINDOW_HEGIHT; row += screenMinorStep)
     {
         SDL_RenderDrawLineF(renderer, 0, row, WINDOW_WIDTH, row);
@@ -60,7 +57,7 @@ void drawGrid(SDL_Renderer *renderer, camera cam)
     // draw major grid
     float startGridMajorX = fmodf(screenX, screenMajorStep);
     float startGridMajorY = fmodf(screenY, screenMajorStep);
-    SDL_SetRenderDrawColor(renderer, 150, 150, 150, 255);
+    SDL_SetRenderDrawColor(renderer, 150, 150, 150, 230);
     for (float row = startGridMajorY; row < WINDOW_HEGIHT; row += screenMajorStep)
     {
         SDL_RenderDrawLineF(renderer, 0, row, WINDOW_WIDTH, row);
@@ -71,7 +68,54 @@ void drawGrid(SDL_Renderer *renderer, camera cam)
     }
 }
 
-// draw function
-// bool drawFunction(const char *function, SDL_Renderer *renderer, SDL_Texture *texture, camera cam)
-// {
-// }
+void drawFunction(SDL_FPoint *samplePoints, uint countSamplePts, SDL_Renderer *renderer, camera cam)
+{
+    float screenX = (SCREEN_CENTERX * cam.zoom) + cam.camPos.x;
+    float screenY = (SCREEN_CENTERY * cam.zoom) + cam.camPos.y;
+
+    int segmentStart = -1; // not plotting
+
+    for (uint i = 0; i < countSamplePts; ++i)
+    {
+        // check if y(x) is a valid number to plot
+        float mathY = samplePoints[i].y;
+        bool isValid = !isnanf(mathY) && !isinff(mathY);
+
+        samplePoints[i].x = samplePoints[i].x * cam.zoom + screenX;
+        samplePoints[i].y = screenY- (samplePoints[i].y * cam.zoom);
+
+        if (samplePoints[i].y >= CUTOFF_HEIGHT || samplePoints[i].y < -CUTOFF_HEIGHT)
+        {
+            isValid = false;
+        }
+
+        if (isValid)
+        {
+            if (segmentStart == -1)
+            {
+                segmentStart = i;
+            }
+        }
+        else
+        {
+            if (segmentStart != -1)
+            {
+                int currSegmentPts = i - segmentStart;
+                if (currSegmentPts > 1)
+                {
+                    SDL_RenderDrawLinesF(renderer, &samplePoints[segmentStart], currSegmentPts);
+                }
+                segmentStart = -1;
+            }        
+        }
+    }
+
+    if (segmentStart != -1)
+    {
+        int currSegmentPts = countSamplePts - segmentStart;
+        if (currSegmentPts > 1)
+        {
+            SDL_RenderDrawLinesF(renderer, &samplePoints[segmentStart], currSegmentPts);
+        }
+    }
+}

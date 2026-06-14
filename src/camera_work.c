@@ -90,9 +90,9 @@ SDL_Rect cameraMorphRect(const camera *cam, SDL_FRect worldObj)
     };
 }
 
-SDL_Point cameraMorphPoint(const camera *cam, SDL_FPoint worldPt)
+SDL_FPoint cameraMorphFPoint(const camera *cam, SDL_FPoint worldPt)
 {
-    return (SDL_Point) {
+    return (SDL_FPoint) {
         (float)(worldPt.x * cam->zoom + cam->camPos.x),
         (float)(worldPt.y * cam->zoom + cam->camPos.y),
     };

@@ -9,7 +9,7 @@ BUILD_DIR = build
 
 TARGET = $(BUILD_DIR)/function-plotter
 
-SRC = $(SRC_DIR)/main.c $(SRC_DIR)/memory.c $(SRC_DIR)/render.c $(SRC_DIR)/latex_handler.c $(SRC_DIR)/camera_work.c $(SRC_DIR)/tinyexpr.c
+SRC = $(SRC_DIR)/main.c $(SRC_DIR)/memory.c $(SRC_DIR)/render.c $(SRC_DIR)/math_handler.c $(SRC_DIR)/latex_handler.c $(SRC_DIR)/camera_work.c $(SRC_DIR)/tinyexpr.c
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 DEPS = $(OBJS:.o=.d)
 

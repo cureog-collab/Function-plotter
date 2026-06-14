@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 #include "camera_work.h"
 
+#include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_video.h>
@@ -14,6 +15,7 @@
 #define WINDOW_HEGIHT 880
 #define SCREEN_CENTERX (WINDOW_WIDTH * 0.5f)
 #define SCREEN_CENTERY (WINDOW_HEGIHT *0.5f)
+#define CUTOFF_HEIGHT 9000
 // =======================================================================================================
 
 // MEMORY ================================================================================================
@@ -26,7 +28,12 @@ void destroyAllSDL(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *text
 
 // RENDER ================================================================================================
 void drawGrid(SDL_Renderer *renderer, camera cam);
-bool drawFunction(const char *function, SDL_Renderer *renderer, SDL_Texture *texture, camera cam);
+void drawFunction(SDL_FPoint *samplePoints, uint countSamplePts, SDL_Renderer *renderer, camera cam);
+// =======================================================================================================
+
+// HANDLE MATH ===========================================================================================
+// output a list of sample points evaluated from the input function
+bool scanFunction(const char *function, SDL_FPoint *samplePoints, const camera *cam);
 // =======================================================================================================
 
 // HANDLE LATEX ==========================================================================================

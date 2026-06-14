@@ -23,6 +23,6 @@ bool updateViewport(camera *cam, const SDL_Event *event);
 
 // transforming the "virtual world" coordinate to the camera's
 SDL_Rect cameraMorphRect(const camera *cam, SDL_FRect worldObj);
-SDL_Point cameraMorphPoint(const camera *cam, SDL_FPoint worldPt);
+SDL_FPoint cameraMorphFPoint(const camera *cam, SDL_FPoint worldPt);
 
 #endif

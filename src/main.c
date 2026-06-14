@@ -25,7 +25,6 @@ int main(int argc, char *argv[])
             printf("Error: failed to read input function!\n");
             return 1;
         }
-        printf("Your input function: %s\n", inputFunction);
     }
 
     // initiate stuff
@@ -45,6 +44,7 @@ int main(int argc, char *argv[])
     bool needReDraw = true;
     SDL_Event mainEvent;
     SDL_Point orgin = {0, 0};
+    SDL_FPoint *samplePoints = malloc(WINDOW_WIDTH * sizeof(SDL_FPoint));
     resetCamera(&mainCam, orgin);
 
     //main program loop
@@ -82,12 +82,16 @@ int main(int argc, char *argv[])
             SDL_SetRenderDrawColor(mainRenderer, 252, 251, 237, 1);
             SDL_RenderClear(mainRenderer);
 
-            // TODO
-
             // draw principle axises
             SDL_SetRenderDrawBlendMode(mainRenderer, SDL_BLENDMODE_BLEND);
             drawGrid(mainRenderer, mainCam);
-            // drawFunction();
+            if (!scanFunction(inputFunction, samplePoints, &mainCam))
+            {
+                return 1;
+            }
+
+            SDL_SetRenderDrawColor(mainRenderer, 45, 112, 179, 255);
+            drawFunction(samplePoints, WINDOW_WIDTH, mainRenderer, mainCam);
             // basically: desmos on a budget
 
             SDL_RenderPresent(mainRenderer);
@@ -96,6 +100,7 @@ int main(int argc, char *argv[])
         SDL_Delay(16);
     }
 
+    free(samplePoints);
     destroyAllSDL(mainWindow, mainRenderer, mainTexture, mainSurface);
     SDL_Quit();
 }

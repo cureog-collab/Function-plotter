@@ -39,7 +39,7 @@ latexMap latexToCDict[] = {
     {"\\tanh", "tanh", 5, 4},
     
     // 7. constants
-    {"\\pi", "M_PI", 3, 4}
+    {"\\pi", "pi", 3, 2}
 };
 const int countOfLatexToCDict = sizeof(latexToCDict) / sizeof(latexToCDict[0]);
 
@@ -61,6 +61,16 @@ bool convertLatexToC(char *src, char *dst)
     }
 
     dst[phase2DstIdx] = '\0';
+
+    // detect if the final form contains anything like "y=...", "u=..." and cut that part out
+    char *equalSign = strrchr(dst, '=');
+    if (equalSign != NULL)
+    {
+        char *actualExpr = equalSign + 1;
+        int exprLen = strlen(actualExpr) + 1;
+        memmove(dst, actualExpr, exprLen);
+    }
+    
     return true;
 }
 
@@ -135,12 +145,6 @@ bool phaseTwoConvertLatexToC(char *src, char *dst, int *srcIdx, int *dstIdx, cha
                     dst[*dstIdx] = '(';
                     (*dstIdx)++;
 
-                    if (src[*srcIdx] == '}') 
-                    {
-                        printf("Error: empty numerator in fraction!\n");
-                        return false;
-                    }
-
                     // recursive call for the numerator
                     if (phaseTwoConvertLatexToC(src, dst, srcIdx, dstIdx, '}'))
                     {
@@ -149,12 +153,6 @@ bool phaseTwoConvertLatexToC(char *src, char *dst, int *srcIdx, int *dstIdx, cha
                         dst[*dstIdx + 2] = '(';
                         *dstIdx += 3;
                         *srcIdx += 2;
-
-                        if (src[*srcIdx] == '}') 
-                        {
-                            printf("Error: empty denominator in fraction!\n");
-                            return false;
-                        }
 
                         if (!phaseTwoConvertLatexToC(src, dst, srcIdx, dstIdx, '}'))
                         {
