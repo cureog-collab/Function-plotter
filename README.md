@@ -6,7 +6,7 @@ A function plotter, basically Desmos on a budget, built in C.
 make
 ./build/function-plotter "y = [your_latex_function]"
 ```
-Note: Always enclose your LaTeX function in double quotes ("") to prevent the terminal from misinterpreting special characters like \ or spaces.
+Note: Always enclose your LaTeX function in double quotes ("") to prevent the terminal from misinterpreting special characters like \ or spaces. The input can include a prefix like "y =" or "f(x) =", or it can simply be the mathematical expression itself (e.g., "\sin{x}").
 
 ## Controls
 Camera zooming and panning by mouse.
