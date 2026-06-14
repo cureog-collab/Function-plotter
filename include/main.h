@@ -26,6 +26,11 @@ void destroyAllSDL(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *text
 
 // RENDER ================================================================================================
 void drawGrid(SDL_Renderer *renderer, camera cam);
+bool drawFunction(const char *function, SDL_Renderer *renderer, SDL_Texture *texture, camera cam);
+// =======================================================================================================
+
+// HANDLE LATEX ==========================================================================================
+bool convertLatexToC(char *src, char *dst);
 // =======================================================================================================
 
 #endif

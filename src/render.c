@@ -1,6 +1,10 @@
 #include "../include/main.h"
+#include "../include/tinyexpr.h"
+
 #include <SDL2/SDL_render.h>
 #include <math.h>
+
+float minorStep;
 
 // draw grid and its principle axises
 void drawGrid(SDL_Renderer *renderer, camera cam)
@@ -22,7 +26,7 @@ void drawGrid(SDL_Renderer *renderer, camera cam)
     float mathWidth = WINDOW_WIDTH / (cam.zoom);
     float rawMagnitude = log10f(mathWidth) - 1.0f;
     float remainderMagnitude = rawMagnitude - (int)rawMagnitude;
-    float minorStep = powf(10.0f, (int)rawMagnitude); // step for the minor grid
+    minorStep = powf(10.0f, (int)rawMagnitude); // step for the minor grid
     float majorStep = minorStep * 10.0f; // step for the major grid
 
     // translate to screen step
@@ -66,3 +70,8 @@ void drawGrid(SDL_Renderer *renderer, camera cam)
         SDL_RenderDrawLineF(renderer, col, 0, col, WINDOW_HEGIHT);
     }
 }
+
+// draw function
+// bool drawFunction(const char *function, SDL_Renderer *renderer, SDL_Texture *texture, camera cam)
+// {
+// }

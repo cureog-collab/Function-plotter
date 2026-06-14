@@ -12,7 +12,7 @@
 int main(int argc, char *argv[])
 {
     // terminal-based function input
-    char *inputFunction = NULL;
+    char inputFunction[2048];
     if (argc > 2)
     {
         printf("Usage: %s [input-function]\n", argv[0]);
@@ -20,8 +20,12 @@ int main(int argc, char *argv[])
     }
     else if (argc == 2)
     {
-        inputFunction = argv[1];
-        printf("input function: %s", inputFunction);
+        if (!convertLatexToC(argv[1], inputFunction))
+        {
+            printf("Error: failed to read input function!\n");
+            return 1;
+        }
+        printf("Your input function: %s\n", inputFunction);
     }
 
     // initiate stuff
