@@ -13,6 +13,7 @@ latexMap latexToCDict[] = {
     // 1. simple operators
     {"\\cdot", "*", 5, 1},
     {"\\times", "*", 6, 1},
+    {"\\div", "/", 4, 1},
     
     // 2. square root
     {"\\sqrt", "sqrt", 5, 4},
